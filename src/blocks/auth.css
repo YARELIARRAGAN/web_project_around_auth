@@ -1,0 +1,106 @@
+.auth__container {
+  font-family: "Inter", Arial, sans-serif;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+.auth__container_title {
+    margin: 60px 0 50px 0;
+}
+.auth__title {
+    size: 24px;
+    color: white;
+    align-items: center;
+}
+.auth__form {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    gap: 30px;
+}
+.auth__input {
+    background-color: black;
+    border: 0;
+    color: white;
+    border-bottom: 1px solid #CCCCCC;
+    height: 27px;
+    size: 14px;
+    font-weight: 500;
+}
+.auth__button {
+    background-color: white;
+    color: black;
+    font-weight: 400;
+    font-size: clamp(0.889rem, 0.81rem + 0.212vw, 1rem);
+    margin-top: 186px;
+    height: 50px;
+    width: 100%;
+    border-radius: 2px;
+    border: none;
+}
+.auth__button:hover {
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+.auth__button:disabled{
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.3);
+    cursor: not-allowed;
+}
+.auth__container_register {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    
+}
+.auth__register {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 17px;
+}
+.auth__register:hover {
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+}
+.auth__input-error {
+  display: none;
+  width: 316px;
+  color: #FF0000;
+  font-weight: 400;
+  font-size: 12px;
+  text-align: start;
+}
+.auth__input-error:last-of-type {
+    margin-top: 7px;
+}
+.auth__input-error-active {
+    display: block;
+}
+
+@media screen and (max-width: 700px) {
+
+.auth__form {
+    width: 81.2%;
+}
+.auth__input {
+    width: 100%;
+}
+.auth__container_register {
+    width: 81.2%
+}
+}
+@media screen and (max-width: 550px) {
+.auth__title {
+    font-size: 20px;
+}
+.auth__register  {
+    font-size: 12px;
+    width: 100%;
+}
+}
