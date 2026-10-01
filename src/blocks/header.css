@@ -82,12 +82,9 @@
     transform: translateY(-8px) rotate(-45deg);
   }
 
-  /* Menú cerrado: oculto */
   .header__container {
     display: none;
   }
-
-  /* Menú abierto: primera fila, a todo el ancho, centrado */
   .header__container-open {
     display: flex;
     flex-direction: column;
