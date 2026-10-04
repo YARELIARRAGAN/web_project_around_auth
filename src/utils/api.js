@@ -1,15 +1,8 @@
  class Api {
     constructor(options) {
         this._baseUrl = options.baseUrl;
-        this._authBaseUrl = options.authBaseUrl
-        this._authHeaders = options.headers;
-        this._cardsHeaders = {Authorization: "90b1a1ac-7ed0-4d39-b23d-5a18dc5240d7",
-                              "Content-Type": "application/json"  };
+        this._cardsHeaders = options.headers;
     }
-
-    setToken(token) {
-        this._authHeaders.Authorization = `Bearer ${token}` 
-     }
  
      _request(endpoint, options = {}) {
         return fetch (`${this._baseUrl}${endpoint}`, {
@@ -19,13 +12,6 @@
         .then(this._checkResponse)
     }
 
-    _authRequest(endpoint, options = {}) {
-        return fetch (`${this._authBaseUrl}${endpoint}`, {
-            headers: this._authHeaders,
-            ...options
-        })
-        .then(this._checkResponse)
-    }
 
     _checkResponse(res) {
         if(res.ok) {
@@ -36,10 +22,6 @@
     
     getInitialCards() {
         return this._request('cards');
-    }
-
-    getUserInfo() {
-        return this._authRequest('users/me');
     }
 
     editUserInfo(userData) {
@@ -114,9 +96,8 @@
 
 const api =  new Api({
     baseUrl: "https://around-api.es.tripleten-services.com/v1/", 
-    authBaseUrl: "https://se-register-api.en.tripleten-services.com/v1/",
     headers: {
-        Authorization: "",
+        Authorization: "90b1a1ac-7ed0-4d39-b23d-5a18dc5240d7",
         "Content-Type": "application/json"
     }
 });

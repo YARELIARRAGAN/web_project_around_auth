@@ -9,6 +9,7 @@ import InfoTooltip from "../InfoTooltip/Infotooltip.jsx";
 import { useEffect, useState } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import ProtectedRoute from "../ProtectedRoute.jsx";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({ data: {} });
@@ -21,22 +22,30 @@ function App() {
   const navigate = useNavigate();
 
   function handleOpenPopup(popup) {
-    setPopup(popup); //aqui se cambia el estado de null y se pasa la variable
+    setPopup(popup); 
   }
 
-  //funcion para cerrar el popup
   function handleClosePopup() {
     setPopup(null);
   }
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     (async () => {
-      if (isLoggedIn) {
-        const userData = await api.getUserInfo();
-        setCurrentUser(userData);
+      if (token) {
+        try {
+          const userData = await auth.checkToken(token);
+          setCurrentUser(userData);
+          setIsLoggedIn(true);
+        } catch {
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+        } 
+      }else {
+        setIsLoggedIn(false);
       }
     })();
-  }, [isLoggedIn]);
+  }, []);
 
   //exportar la instancia de api para obtener las cards
 
@@ -97,7 +106,6 @@ function App() {
         const newData = await auth.authorize(email, password);
         setIsLoggedIn(true);
         localStorage.setItem("token", newData.token);
-        api.setToken(newData.token);
         navigate("/");
       } catch (err) {
         setIsSuccess(false);
@@ -107,24 +115,6 @@ function App() {
     })();
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    (async () => {
-        if (token) {
-          try{
-            api.setToken(token);
-            const userData = await api.getUserInfo();
-            setIsLoggedIn(true);
-          } catch (err) {
-            localStorage.removeItem("token");
-            setIsLoggedIn(false);
-          }
-        } else {
-          setIsLoggedIn(false);
-        }
-    })();
-  }, []);
-
   //funcion para dar like a la carta
 
   const handleCardLike = (card) => {
@@ -132,15 +122,16 @@ function App() {
     (async () => {
       try {
         const newCard = await api.changeLikeCardStatus(card._id, !isLiked);
-      setCards((state) =>
-        state.map((currentCard) =>
-          currentCard._id === card._id ? newCard : currentCard
-        ));
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard
+          )
+        );
       } catch (err) {
         console.error(err);
       }
     })();
-  }
+  };
 
   const handleCardDelete = (card) => {
     (async () => {
@@ -149,11 +140,11 @@ function App() {
         setCards((state) =>
           state.filter((currentCard) => currentCard._id !== card._id)
         );
-      } catch(err) {
+      } catch (err) {
         console.error(err);
       }
     })();
-  }
+  };
 
   const handlePopupImageClick = (card) => {
     setSelectedCard(card);
@@ -181,7 +172,7 @@ function App() {
             onClose={() => {
               setIsTooltipOpen(false);
               if (isSuccess) {
-                navigate("/");
+                navigate("/signin");
               }
             }}
           />
@@ -190,16 +181,18 @@ function App() {
           <Route
             path="/"
             element={
-              <Main
-                onOpenPopup={handleOpenPopup}
-                onClosePopup={handleClosePopup}
-                popup={popup}
-                cards={cards}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDelete}
-                onPopupImageClick={handlePopupImageClick}
-                selectedCard={selectedCard}
-              />
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <Main
+                  onOpenPopup={handleOpenPopup}
+                  onClosePopup={handleClosePopup}
+                  popup={popup}
+                  cards={cards}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  onPopupImageClick={handlePopupImageClick}
+                  selectedCard={selectedCard}
+                />
+              </ProtectedRoute>
             }
           />
 

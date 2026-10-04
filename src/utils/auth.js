@@ -1,33 +1,45 @@
-const auth = {
 
+const baseUrl = "https://se-register-api.en.tripleten-services.com/v1";
+
+async function fetchData (endpoint, options = {}) {
+  const res = await fetch(`${baseUrl}${endpoint}`, options);
+  return res.ok ? res.json() : Promise.reject(res.status);
+}
+
+const auth = {
+  
     async register(email, password) {
-        try {
-          const res = await fetch("https://se-register-api.en.tripleten-services.com/v1/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-          });
-      
-        return res.ok ? res.json() : Promise.reject(`${res.status}`);
-      
-        } catch (err) {
-         throw err
-       }
+         return await fetchData("/signup", 
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ email, password })
+            })
       },
-    
+
       async authorize(email, password) {
-        try {
-          const res = await fetch("https://se-register-api.en.tripleten-services.com/v1/signin", {
+        return await fetchData("/signin", 
+          {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({ email, password })
-          });
-      
-        return res.ok ? res.json() : Promise.reject(`${res.status}`);
-      
-        } catch (err) {
-         throw err
-       }
+          })
       },
+
+      async checkToken(token) {
+        return await fetchData("/users/me", 
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+            },
+          })
+
+      }
 }
  export default auth;
