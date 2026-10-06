@@ -1,0 +1,11 @@
+.loading-screan {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+  align-items: center;
+}
+.text-loading-screan {
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+}

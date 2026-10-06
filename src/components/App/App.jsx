@@ -8,7 +8,7 @@ import Register from "../Register/register.jsx";
 import InfoTooltip from "../InfoTooltip/Infotooltip.jsx";
 import { useEffect, useState } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import ProtectedRoute from "../ProtectedRoute.jsx";
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [validatingToken, setValidatingToken] = useState(true);
   const navigate = useNavigate();
 
   function handleOpenPopup(popup) {
@@ -40,9 +41,12 @@ function App() {
         } catch {
           localStorage.removeItem("token");
           setIsLoggedIn(false);
-        } 
+        } finally {
+          setValidatingToken(false);
+        }
       }else {
         setIsLoggedIn(false);
+        setValidatingToken(false);
       }
     })();
   }, []);
@@ -89,7 +93,7 @@ function App() {
   const handleRegisterSubmit = (email, password) => {
     (async () => {
       try {
-        const newData = await auth.register(email, password);
+        await auth.register(email, password);
         setIsSuccess(true);
         setIsTooltipOpen(true);
       } catch (err) {
@@ -181,7 +185,10 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <ProtectedRoute 
+              isLoggedIn={isLoggedIn}
+              validatingToken={validatingToken}
+              >
                 <Main
                   onOpenPopup={handleOpenPopup}
                   onClosePopup={handleClosePopup}
@@ -203,6 +210,16 @@ function App() {
           <Route
             path="/signin"
             element={<Login onSubmitLogin={handleLoginSubmit} />}
+          />
+          <Route
+            path="*"
+            element={
+              validatingToken ? (
+                <div className="loading-screan">
+                <p className="text-loading-screan">Cargando...</p>
+              </div>
+              ) :
+            <Navigate to={isLoggedIn ? "/" : "/signin"} />}
           />
         </Routes>
         <Footer />

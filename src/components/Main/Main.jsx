@@ -1,13 +1,11 @@
 
-import avatar from "../../images/avatar.jpg";
-import { useState, useEffect, useContext} from "react";
+import { useContext} from "react";
 import NewCard from "./components/form/NewCard/NewCard.jsx";
 import EditProfile from "./components/form/EditProfile/EditProfile.jsx";
 import EditAvatar from "./components/form/EditAvatar/EditAvatar.jsx";
 import Popup from "./components/Popup/Popup.jsx";
 import Card from "./components/Card/Card.jsx";
 import ImagePopup from "./components/ImagePopup/ImagePopup.jsx";
-import api from "../../utils/api.js";
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 
 function Main({ onOpenPopup, onClosePopup, popup, cards, onCardLike, onCardDelete, onPopupImageClick, selectedCard }) {
@@ -20,7 +18,7 @@ function Main({ onOpenPopup, onClosePopup, popup, cards, onCardLike, onCardDelet
   const newCardPopup = {title: "Nuevo Lugar", children: <NewCard />};
   const editProfilePopup = {title: "Editar perfil", children: <EditProfile onClosePopup={onClosePopup}/>};
   const editvatarPopup = {title: "Cambiar foto del perfil", children: <EditAvatar />};
-  const imagePopup = {title: "image", children: <ImagePopup  />  };
+
 
   
 
@@ -52,7 +50,6 @@ function Main({ onOpenPopup, onClosePopup, popup, cards, onCardLike, onCardDelet
     aria-label="Agregar tarjeta"
     className="profile__add-button"
     type="button"
-    //aqui se maneja el click para abrir el popup
     onClick={() => onOpenPopup(newCardPopup)}
   ></button>
 </section>

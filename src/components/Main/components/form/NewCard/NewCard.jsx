@@ -5,7 +5,7 @@ import { useFormValidation } from '../../../../../utils/useFormValidation';
 export default function NewCard() {
 
     const userContext = useContext(CurrentUserContext);
-    const { currenUser, handleAddPlaceSubmit } = userContext;
+    const { handleAddPlaceSubmit } = userContext;
     const { isFormValid, checkFormValidity, formRef} = useFormValidation();
 
     const [ name, setName ] = useState('');

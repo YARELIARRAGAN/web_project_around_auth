@@ -1,39 +1,27 @@
 import { useState, useContext } from 'react';
 import CurrentUserContext from '../../../../../contexts/CurrentUserContext';
 import { useFormValidation } from '../../../../../utils/useFormValidation';
-import { useEffect } from 'react';
 
 export default function EditProfile() {
    
     const userContext  = useContext(CurrentUserContext);
     const { currentUser, handleUpdateUser } = userContext;
     const { isFormValid, checkFormValidity, formRef} = useFormValidation();
-   
-    
-
-    //Agregar variables de esado para name y descrition
     const [name, setName] = useState(currentUser.name);
     const  [description, setDescription] = useState(currentUser.about);
   
-
-    //funcion para actualizar el valor de name
     const handleNameChange = (e) => {
       setName(e.target.value);
     }
 
-    //funcion para actualizr le valor de description
     const handleDescriptionChange = (e) => {
     
       setDescription(e.target.value);
       
     }
 
-
-    //Funcion para manejar el envio del formulario
     const handleSubmit = (e) => {
       e.preventDefault();
-
-      //autualizar la informcion del usuario
       handleUpdateUser({ name, about: description});
     }
 
